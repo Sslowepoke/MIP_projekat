@@ -6,7 +6,7 @@ clear; close all; clc;
 Ts = 0.01;
 fs = 1/Ts;
 
-load('step_1.mat')
+load('merenja/.mat')
 % raspakivanje merenja
 ut = out.simout(:,1);
 yt = out.simout(:,2);

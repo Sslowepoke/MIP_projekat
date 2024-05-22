@@ -1,0 +1,365 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      -->
+<title>zad1</title>
+<meta name="generator" content="MATLAB 24.1">
+<link rel="schema.DC" href="http://purl.org/dc/elements/1.1/">
+<meta name="DC.date" content="2024-05-21">
+<meta name="DC.source" content="zad1.m">
+<style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+span.typesection { color:#A0522D }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style>
+</head>
+<body>
+<div class="content">
+<h2>Contents</h2>
+<div>
+<ul>
+<li>
+<a href="#1">Zadatak 1</a>
+</li>
+<li>
+<a href="#2">samo onaj deo koji nam treba</a>
+</li>
+<li>
+<a href="#3">kasnjenje</a>
+</li>
+<li>
+<a href="#4">filtriranje signala - pitanje da l je uopste bolje i da l je neophodno</a>
+</li>
+<li>
+<a href="#5">G(s) = K/(T*s + 1) * e^(tau*s)</a>
+</li>
+<li>
+<a href="#6">ostaje jos da se odredi ekvivalentni ARX model prvog reda</a>
+</li>
+</ul>
+</div>
+<h2 id="1">Zadatak 1</h2>
+<p>ucitavanje merenja</p>
+<pre class="codeinput">clear; close <span class="string">all</span>; clc;
+
+Ts = 0.01;
+fs = 1/Ts;
+
+load(<span class="string">'merenja/step_1.mat'</span>)
+<span class="comment">% raspakivanje merenja</span>
+ut = out.simout(:,1);
+yt = out.simout(:,2);
+up = out.simout(:,3);
+yp = out.simout(:,4);
+t_sim = out.tout(1:50001);
+
+figure
+plot(t_sim, yt);
+hold <span class="string">on</span>
+plot(t_sim, ut);
+hold <span class="string">off</span>
+title(<span class="string">'celo merenje'</span>)
+</pre>
+<img vspace="5" hspace="5" src="zad1_01.png" alt=""> <h2 id="2">samo onaj deo koji nam treba</h2>
+<p>uzimamo deo kada se ukljucila step pobuda, a poremecaja nema y = yt(ut&gt;5 &amp; up == 2); u = ut(ut&gt;5 &amp; up == 2); t = t_sim(ut&gt;5 &amp; up ==2); iz nekog razloga ima 3 vrednosti sa istim t pa zato mora ovako</p>
+<pre class="codeinput">y = yt(10003:30002);
+u = ut(10003:30002);
+t = (1:20000)*Ts;
+
+figure
+plot(t, y)
+hold <span class="string">on</span>
+plot(t, u);
+hold <span class="string">off</span>
+title(<span class="string">'samo ono sto nam treba'</span>)
+legend(<span class="string">'y'</span>, <span class="string">'u'</span>)
+</pre>
+<img vspace="5" hspace="5" src="zad1_02.png" alt=""> <h2 id="3">kasnjenje</h2>
+<p>% tau = 0.6 s yt1_bez_kasnjenja = y(60:end); t1_bez_kasnjenja = t(60:end); u_bez_kasnjenja = u(60:end); % figure % plot(t1_bez_kasnjenja, yt1_bez_kasnjenja)</p>
+<p>y = yt1_bez_kasnjenja; t = t1_bez_kasnjenja; u = u_bez_kasnjenja;</p>
+<h2 id="4">filtriranje signala - pitanje da l je uopste bolje i da l je neophodno</h2>
+<p>deluje bolje? skidanje pocetne vrednosti</p>
+<pre class="codeinput">y_0 = y(1);
+y = y - y_0;
+
+<span class="comment">% low pass filtar, frekvencija izabrana na oko, ispadne posle isto ko</span>
+<span class="comment">% fs_new, sto se i slaze :)</span>
+Hd = designfilt(<span class="string">'lowpassfir'</span>,<span class="string">'FilterOrder'</span>,20,<span class="string">'CutoffFrequency'</span>,0.2, <span class="keyword">...</span>
+       <span class="string">'DesignMethod'</span>,<span class="string">'window'</span>,<span class="string">'Window'</span>,{@kaiser,3},<span class="string">'SampleRate'</span>,fs);
+yf = filter(Hd,y);
+
+
+
+<span class="comment">% MA samo srednja vrednost 5 odbiraka</span>
+<span class="comment">% b = [0.2 0.2 0.2 0.2 0.2];</span>
+<span class="comment">% % b = [0.8 0.2];</span>
+<span class="comment">% % yf = fftfilt(Num, yt1);</span>
+<span class="comment">% yf = filter(b, 1, y);</span>
+
+figure;
+plot(t, y, <span class="string">'b'</span>);
+hold <span class="string">all</span>;
+plot(t, yf, <span class="string">'r'</span>);
+hold <span class="string">off</span>;
+title(<span class="string">'filtriranje'</span>);
+
+y = yf;
+</pre>
+<img vspace="5" hspace="5" src="zad1_03.png" alt=""> <h2 id="5">G(s) = K/(T*s + 1) * e^(tau*s)</h2>
+<p>sa grafika</p>
+<pre class="codeinput">tau = 0.6;
+
+y_0 = mean(yt(t_sim&gt;95 &amp; t_sim &lt;100));
+y_end = mean(yt(t_sim&gt;250 &amp; t_sim &lt; 270));
+delta_y = y_end - y_0;
+
+delta_u = ut(t_sim == 250) - ut(t_sim == 95);
+
+K_est = delta_y/delta_u;
+
+y90 = delta_y*0.90;
+y10 = delta_y*0.1;
+
+ind90 = find(y &gt; y90, 1, <span class="string">'first'</span>);
+ind10 = find(y&lt; y10, 1, <span class="string">'last'</span>);
+t_rise = (ind90-ind10)*Ts;
+
+T_est = t_rise/2.197;
+
+save(<span class="string">'data.m'</span>, <span class="string">'T_est'</span>)
+
+<span class="comment">% resample-ovanje</span>
+Ts_new = floor(T_est/10);
+fs_new = 1/Ts_new;
+y = resample(y, 1, Ts_new/Ts);
+u = resample(u, 1, Ts_new/Ts);
+t = (1:length(u))*Ts_new;
+
+<span class="comment">% G(s)</span>
+s = tf(<span class="string">'s'</span>);
+G = K_est/(s*T_est + 1)*exp(-tau*s);
+<span class="comment">% G = K_est/(s*T_est+1);</span>
+u_sim = ones(length(u), 1);
+y_sim = lsim(G, u_sim', t);
+
+figure
+plot(t, y)
+hold <span class="string">on</span>
+plot(t, y_sim)
+hold <span class="string">off</span>
+title(<span class="string">'estimacija funkcijom prenosa prvog reda'</span>)
+</pre>
+<img vspace="5" hspace="5" src="zad1_04.png" alt=""> <h2 id="6">ostaje jos da se odredi ekvivalentni ARX model prvog reda</h2>
+<p class="footer">
+<br>
+<a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2024a</a>
+<br>
+</p>
+</div>
+<!--
+##### SOURCE BEGIN #####
+%% Zadatak 1
+% ucitavanje merenja
+
+clear; close all; clc;
+
+Ts = 0.01;
+fs = 1/Ts;
+
+load('merenja/step_1.mat')
+% raspakivanje merenja
+ut = out.simout(:,1);
+yt = out.simout(:,2);
+up = out.simout(:,3);
+yp = out.simout(:,4);
+t_sim = out.tout(1:50001);
+
+figure
+plot(t_sim, yt);
+hold on
+plot(t_sim, ut);
+hold off
+title('celo merenje')
+
+%% samo onaj deo koji nam treba
+% uzimamo deo kada se ukljucila step pobuda, a poremecaja nema
+% y = yt(ut>5 & up == 2);
+% u = ut(ut>5 & up == 2);
+% t = t_sim(ut>5 & up ==2);
+% iz nekog razloga ima 3 vrednosti sa istim t pa zato mora ovako
+y = yt(10003:30002);
+u = ut(10003:30002);
+t = (1:20000)*Ts;
+
+figure
+plot(t, y)
+hold on
+plot(t, u);
+hold off
+title('samo ono sto nam treba')
+legend('y', 'u')
+
+%% kasnjenje
+% % tau = 0.6 s
+% yt1_bez_kasnjenja = y(60:end);
+% t1_bez_kasnjenja = t(60:end);
+% u_bez_kasnjenja = u(60:end);
+% % figure
+% % plot(t1_bez_kasnjenja, yt1_bez_kasnjenja)
+% 
+% y = yt1_bez_kasnjenja;
+% t = t1_bez_kasnjenja;
+% u = u_bez_kasnjenja;
+%% filtriranje signala - pitanje da l je uopste bolje i da l je neophodno
+% deluje bolje?
+% skidanje pocetne vrednosti
+y_0 = y(1);
+y = y - y_0;
+
+% low pass filtar, frekvencija izabrana na oko, ispadne posle isto ko
+% fs_new, sto se i slaze :)
+Hd = designfilt('lowpassfir','FilterOrder',20,'CutoffFrequency',0.2, ...
+       'DesignMethod','window','Window',{@kaiser,3},'SampleRate',fs);
+yf = filter(Hd,y);
+
+
+
+% MA samo srednja vrednost 5 odbiraka
+% b = [0.2 0.2 0.2 0.2 0.2];
+% % b = [0.8 0.2];
+% % yf = fftfilt(Num, yt1);
+% yf = filter(b, 1, y);
+
+figure;
+plot(t, y, 'b');
+hold all;
+plot(t, yf, 'r');
+hold off;
+title('filtriranje');
+
+y = yf;
+%% G(s) = K/(T*s + 1) * e^(tau*s)
+% sa grafika
+tau = 0.6;
+
+y_0 = mean(yt(t_sim>95 & t_sim <100));
+y_end = mean(yt(t_sim>250 & t_sim < 270));
+delta_y = y_end - y_0;
+
+delta_u = ut(t_sim == 250) - ut(t_sim == 95);
+
+K_est = delta_y/delta_u;
+
+y90 = delta_y*0.90;
+y10 = delta_y*0.1;
+
+ind90 = find(y > y90, 1, 'first');
+ind10 = find(y< y10, 1, 'last');
+t_rise = (ind90-ind10)*Ts;
+
+T_est = t_rise/2.197;
+
+save('data.m', 'T_est')
+
+% resample-ovanje
+Ts_new = floor(T_est/10);
+fs_new = 1/Ts_new;
+y = resample(y, 1, Ts_new/Ts);
+u = resample(u, 1, Ts_new/Ts);
+t = (1:length(u))*Ts_new;
+
+% G(s)
+s = tf('s');
+G = K_est/(s*T_est + 1)*exp(-tau*s);
+% G = K_est/(s*T_est+1);
+u_sim = ones(length(u), 1);
+y_sim = lsim(G, u_sim', t);
+
+figure
+plot(t, y)
+hold on
+plot(t, y_sim)
+hold off
+title('estimacija funkcijom prenosa prvog reda')
+
+
+%% ostaje jos da se odredi ekvivalentni ARX model prvog reda
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+##### SOURCE END #####
+-->
+</body>
+</html>

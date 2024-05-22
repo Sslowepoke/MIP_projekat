@@ -1,9 +1,9 @@
 %% parametri prbs
 clear; close all; clc;
-load('data.m') %T_est
+load('T_est.mat') %T_est
 
 Fmax = 1/(T_est*2*pi);
-Fmin = Fmax/10;
+Fmin = Fmax/3;
 
 Ts_prbs = 2*pi/5/Fmax;
 Order = floor(log(2*pi/Ts_prbs/Fmin) / log(2));

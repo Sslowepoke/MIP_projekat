@@ -38,42 +38,10 @@ title('celo merenje')
 xline(t_disturbance)
 % doterati grafik
 
-
-%% izbacivanje transportnog kasnjenja iz podataka
+% izbacivanje transportnog kasnjenja iz podataka
 y = y(tau/Ts:end);
 u = u(tau/Ts:end);
-t = (1:length(u))*Ts;
+t = (1:length(u))
 
-%% LLS
-y1 = y(1:find(t>t_disturbance, 1, 'first'));
-u1 = u(1:find(t>t_disturbance, 1, 'first'));
-t1 = (0:length(u1)-1)*Ts;
-% regresioni vektor
-Phi = [-y1(1:end-1) u1(1:end-1)];
-Y = y1(2:end);
+%% 
 
-
-Teta = (Phi'*Phi)^(-1)*Phi'*Y;
-a1 = Teta(1);
-b1 = Teta(2);
-
-% procena diskretnog pola
-p_est = - a1; 
-% procena pojacanja
-K_est = b1/(1+a1);
-
-sp_est = log(p_est)/Ts;
-
-G_est = tf(-K_est * sp_est, [1 -sp_est]);
-
-y_est = lsim(G_est, u1, t1);
-
-figure
-subplot(2,1,1)
-plot(t1, u1);
-grid on
-subplot(2,1,2)
-plot(t1, y1);
-hold on
-plot(t1, y_est, 'r--')
-hold off

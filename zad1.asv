@@ -132,16 +132,19 @@ tr = t(1:n:end);
 
 
 u_sim = delta_u * ones(length(ur), 1);
-y_sim = lsim(G, u_sim', tr);
+y_sim = lsim(G, u_sim', t);
 
 figure
-plot(tr, yr-y_0)
+plot(t, y-y_0)
 hold on
-plot(tr, y_sim)
+plot(t, y_sim)
 hold off
 title('estimacija funkcijom prenosa prvog reda')
 yline(y_0-y_0)
 yline(y_end-y_0)
+
+
+
 
 %% ostaje jos da se odredi ekvivalentni ARX model prvog reda (LLS)
 
